@@ -11,7 +11,6 @@ dx download "02-data/data_questionnaire.csv" -o "data/questionnaire.csv"
 dx download "02-data/data_clinic_measurements.csv" -o "data/clinic.csv"
 
 
-
 #######################################
 ## BASH ENDING FOR DATA CLEANING
 #######################################

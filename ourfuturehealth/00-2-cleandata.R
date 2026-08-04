@@ -8,6 +8,7 @@ library(dplyr)
 participants <- read.csv("data/participant.csv")
 questionnaire <- read.csv("data/questionnaire.csv")
 clinic <- read.csv("data/clinic.csv")
+
 #remove 'id' column from questionnaire and clinic dataframes
 questionnaire <- questionnaire %>% dplyr::select(-id)
 clinic <- clinic %>% dplyr::select(-id)
@@ -18,8 +19,6 @@ alldata[alldata == ""] <- NA
 
 ## remove participants who did not answer the diag_2_m question (i.e. those who did not complete v2 of the questionnaire)
 alldata <- alldata %>% dplyr::filter(!is.na(diag_2_m))
-## now remove unnecessary columns
-alldata <- alldata %>% dplyr::select(-c("diag_2_m", "sleep_trouble_1_1", "demog_sex_1_1"))
 
 ## Rename columns to more interpretable variable names
 alldata <- alldata %>% rename(
@@ -43,8 +42,10 @@ alldata <- alldata %>% rename(
   "orig_smoking_type" = "smoke_tobacco_type_1_m",
   "orig_smoking_100" = "smoke_100_times_2_1",
   "orig_social" = "lifestyle_social_visits_1_1",
-  "orig_fatherpsych" = "father_diag_a_2_m",
-  "orig_motherpsych" = "mother_diag_a_2_m"
+  "orig_fatherdiag" = "father_diag_a_2_m",
+  "orig_motherdiag" = "mother_diag_a_2_m",
+  "orig_fatherpsych" = "father_diag_psych_1_m",
+  "orig_motherpsych" = "mother_diag_psych_1_m"
 )
 
 ###########################################################
@@ -52,11 +53,15 @@ alldata <- alldata %>% rename(
 ###########################################################
 
 alldata <- alldata %>% mutate(depression = case_when(
+  diag_2_m == "None of the above" ~ FALSE,
+  diag_2_m == "Do not know" ~ NA,
+  diag_2_m == "Prefer not to answer" ~ NA,
   diag_psych == "Do not know" ~ NA,
   diag_psych == "Prefer not to answer" ~ NA,
   grepl("Depression", diag_psych, ignore.case = T) ~ TRUE,
   TRUE ~ FALSE
 ))
+alldata <- alldata %>% dplyr::select(-c("diag_2_m"))
 
 ## Recode PHQ-9 variables to numeric
 alldata <- alldata %>% mutate(across(.cols = starts_with("phq"), 
@@ -185,13 +190,36 @@ alldata <- alldata %>% mutate(social = case_when(
 
 
 ## Create new columns for family psychiatric history
+## first, check for "mental health" in overall mother/father diag
 ## TRUE if mother/father diag_psych contains "Depression"
+alldata$orig_motherdiag[alldata$orig_motherdiag == "Do not know"] <- NA
+alldata$orig_motherdiag[alldata$orig_motherdiag == "Prefer not to answer"] <- NA
 alldata$orig_motherpsych[alldata$orig_motherpsych == "Do not know"] <- NA
 alldata$orig_motherpsych[alldata$orig_motherpsych == "Prefer not to answer"] <- NA
+
+alldata$orig_fatherdiag[alldata$orig_fatherdiag == "Do not know"] <- NA
+alldata$orig_fatherdiag[alldata$orig_fatherdiag == "Prefer not to answer"] <- NA
 alldata$orig_fatherpsych[alldata$orig_fatherpsych == "Do not know"] <- NA
 alldata$orig_fatherpsych[alldata$orig_fatherpsych == "Prefer not to answer"] <- NA
-alldata$motherpsych <- ifelse(grepl("Depression", alldata$orig_motherpsych, ignore.case = T), TRUE, FALSE)
-alldata$fatherpsych <- ifelse(grepl("Depression", alldata$orig_fatherpsych, ignore.case = T), TRUE, FALSE)
+
+alldata <- alldata %>% mutate(motherpsych = case_when(
+  is.na(orig_motherdiag) ~ NA, # participant responded to family health history
+  orig_motherdiag == "None of the above" ~ FALSE, # mother had no diagnoses = no depression diagnosis
+  orig_motherpsych == "None of the above" ~ FALSE,
+  !is.na(orig_motherdiag) & !grepl("Mental health", orig_motherdiag, ignore.case = T) ~ FALSE, # mother had diagnoses other than mental health = no depression
+  grepl("Depression", orig_motherpsych, ignore.case = T) ~ TRUE # mental health diagnosis specified as depression
+))
+
+alldata <- alldata %>% mutate(fatherpsych = case_when(
+  is.na(orig_fatherdiag) ~ NA,
+  orig_fatherdiag == "None of the above" ~ FALSE,
+  orig_fatherpsych == "None of the above" ~ FALSE,
+  !is.na(orig_fatherdiag) & !grepl("Mental health", orig_fatherdiag, ignore.case = T) ~ FALSE,
+  grepl("Depression", orig_fatherpsych, ignore.case = T) ~ TRUE
+))
+
+#alldata$motherpsych <- ifelse(grepl("Depression", alldata$orig_motherpsych, ignore.case = T), TRUE, FALSE)
+#alldata$fatherpsych <- ifelse(grepl("Depression", alldata$orig_fatherpsych, ignore.case = T), TRUE, FALSE)
 
 
 
@@ -216,7 +244,7 @@ alldata <- alldata %>% dplyr::filter(immigrate_duration >= 0 | is.na(immigrate_d
 
 ## Finally, delete unnecessary columns and reorder columns as needed to generate cleaned dataset
 alldata <- alldata %>% dplyr::select(-c(
-  "orig_ethnicity", "diag_psych", "birthplace", "education", "orig_alcohol", "orig_smoking_type", "orig_smoking_100", "orig_social", "orig_fatherpsych", "orig_motherpsych", "consent_year", "birth_year", "diag_endocr_1_m"
+  "orig_ethnicity", "diag_psych", "birthplace", "education", "orig_alcohol", "orig_smoking_type", "orig_smoking_100", "orig_social", "orig_fatherpsych", "orig_motherpsych", "orig_fatherdiag", "orig_motherdiag", "consent_year", "birth_year"
 ))
 alldata <- alldata %>% relocate(
   pid, #participant ID

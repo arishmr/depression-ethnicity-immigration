@@ -94,14 +94,6 @@ output <- logreg_immigration(data, "Mixed or Multiple Heritage", "depression", "
 output <- logreg_immigration(data, "Other Asian", "depression", "immigrate_duration", "vs Higher Duration")
 output <- logreg_immigration(data, "South Asian", "depression", "immigrate_duration", "vs Higher Duration")
 output <- logreg_immigration(data, "White", "depression", "immigrate_duration", "vs Higher Duration")
-## for current depression across all ethnicities
-output <- logreg_immigration(data, "Overall", "currdep", "immigrate_duration", "vs Higher Duration")
-output <- logreg_immigration(data, "Arab", "currdep", "immigrate_duration", "vs Higher Duration")
-output <- logreg_immigration(data, "Black", "currdep", "immigrate_duration", "vs Higher Duration")
-output <- logreg_immigration(data, "Mixed or Multiple Heritage", "currdep", "immigrate_duration", "vs Higher Duration")
-output <- logreg_immigration(data, "Other Asian", "currdep", "immigrate_duration", "vs Higher Duration")
-output <- logreg_immigration(data, "South Asian", "currdep", "immigrate_duration", "vs Higher Duration")
-output <- logreg_immigration(data, "White", "currdep", "immigrate_duration", "vs Higher Duration")
 ## for undiagnosed depression across all ethnicities
 output <- logreg_immigration(data, "Overall", "undiagdep", "immigrate_duration", "vs Higher Duration")
 output <- logreg_immigration(data, "Arab", "undiagdep", "immigrate_duration", "vs Higher Duration")
@@ -110,9 +102,6 @@ output <- logreg_immigration(data, "Mixed or Multiple Heritage", "undiagdep", "i
 output <- logreg_immigration(data, "Other Asian", "undiagdep", "immigrate_duration", "vs Higher Duration")
 output <- logreg_immigration(data, "South Asian", "undiagdep", "immigrate_duration", "vs Higher Duration")
 output <- logreg_immigration(data, "White", "undiagdep", "immigrate_duration", "vs Higher Duration")
-
-# correct p values for multiple comparisons
-#output$p.fdr <- p.adjust(output$p.value, method = "fdr")
 
 # correct p values for multiple comparisons
 output$p.fdr <- p.adjust(output$p.value, method = "fdr")
@@ -206,14 +195,6 @@ output <- logreg_immigration(data, "Mixed or Multiple Heritage", "depression", "
 output <- logreg_immigration(data, "Other Asian", "depression", "immigrate_stage", "vs Adulthood")
 output <- logreg_immigration(data, "South Asian", "depression", "immigrate_stage", "vs Adulthood")
 output <- logreg_immigration(data, "White", "depression", "immigrate_stage", "vs Adulthood")
-## for current depression across all ethnicities
-output <- logreg_immigration(data, "Overall", "currdep", "immigrate_stage", "vs Adulthood")
-output <- logreg_immigration(data, "Arab", "currdep", "immigrate_stage", "vs Adulthood")
-output <- logreg_immigration(data, "Black", "currdep", "immigrate_stage", "vs Adulthood")
-output <- logreg_immigration(data, "Mixed or Multiple Heritage", "currdep", "immigrate_stage", "vs Adulthood")
-output <- logreg_immigration(data, "Other Asian", "currdep", "immigrate_stage", "vs Adulthood")
-output <- logreg_immigration(data, "South Asian", "currdep", "immigrate_stage", "vs Adulthood")
-output <- logreg_immigration(data, "White", "currdep", "immigrate_stage", "vs Adulthood")
 ## for undiagnosed depression across all ethnicities
 output <- logreg_immigration(data, "Overall", "undiagdep", "immigrate_stage", "vs Adulthood")
 output <- logreg_immigration(data, "Arab", "undiagdep", "immigrate_stage", "vs Adulthood")

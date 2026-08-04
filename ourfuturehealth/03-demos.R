@@ -31,6 +31,7 @@ output <- data.frame(
 anova <- data.frame(
   variable = character(0),
   predictor = character(0),
+  N = numeric(0),
   Df = numeric(0),
   Fstat = numeric(0),
   p.value = numeric(0),
@@ -83,17 +84,19 @@ splitdata[[4]] <- NULL # delete element of list that involves immigrate_duration
 ## Now apply the anova function over each element of the splitdata
 anova <- lapply(splitdata, function (x) {
   y <- summary(aov(value ~ ethnicity, data = x))
+  N <- nobs(aov(value ~ ethnicity, data = x))
   Df <- y[[1]][1,1]
   Fstat <- y[[1]][1,4]
   p.value <- y[[1]][1,5]
-  y <- data.frame(variable = unique(x$variable), predictor = "ethnicity", Df, Fstat, p.value)
+  y <- data.frame(variable = unique(x$variable), predictor = "ethnicity", N, Df, Fstat, p.value)
   y <- dplyr::bind_rows(anova, y)
   y
   z <- summary(aov(value ~ immigration, data = x))
+  N <- nobs(aov(value ~ immigration, data = x))
   Df <- z[[1]][1,1]
   Fstat <- z[[1]][1,4]
   p.value <- z[[1]][1,5]
-  z <- data.frame(variable = unique(x$variable), predictor = "immigration", Df, Fstat, p.value)
+  z <- data.frame(variable = unique(x$variable), predictor = "immigration", N, Df, Fstat, p.value)
   z <- dplyr::bind_rows(z, y)
   z
 })
@@ -115,7 +118,7 @@ rm(contdemos, output, splitdata, anova)
 catdemos <- demodata %>%
   tidyr::gather(key = "variable",
                 value = "value",
-                sex, income, alcohol, smoking, fatherpsych, motherpsych, immigrate_stage) %>%
+                sex, depression, income, alcohol, smoking, fatherpsych, motherpsych, immigrate_stage) %>%
   tidyr::drop_na(value)
 
 ## Split dataset by demographic variables
@@ -142,6 +145,7 @@ output <- data.frame(
 chisq <- data.frame(
   variable = character(0),
   predictor = character(0),
+  N = numeric(0),
   Df = numeric(0),
   chi = numeric(0),
   p.value = numeric(0),
@@ -177,22 +181,24 @@ output <- lapply(splitdata, function (x) {
 })
 output <- purrr::reduce(output, full_join)
 
-splitdata[[3]] <- NULL # delete element of list that involves immigrate_stage
+splitdata[[4]] <- NULL # delete element of list that involves immigrate_stage
 
 ## Now apply the chisq function over each element of the splitdata
 chisq <- lapply(splitdata, function (x) {
   y <- chisq.test(x$value, x$ethnicity)
+  N <- sum(y$observed)
   Df <- as.numeric(y[[2]])
   chi <- as.numeric(y[[1]])
   p.value <- y[[3]]
-  y <- data.frame(variable = unique(x$variable), predictor = "ethnicity", Df, chi, p.value)
+  y <- data.frame(variable = unique(x$variable), predictor = "ethnicity", N, Df, chi, p.value)
   y <- dplyr::bind_rows(chisq, y)
   y
   z <- chisq.test(x$value, x$immigration)
+  N <- sum(z$observed)
   Df <- as.numeric(z[[2]])
   chi <- as.numeric(z[[1]])
   p.value <- z[[3]]
-  z <- data.frame(variable = unique(x$variable), predictor = "immigration", Df, chi, p.value)
+  z <- data.frame(variable = unique(x$variable), predictor = "immigration", N, Df, chi, p.value)
   z <- dplyr::bind_rows(y, z)
   z
 })

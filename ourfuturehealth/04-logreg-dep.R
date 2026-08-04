@@ -79,13 +79,10 @@ logreg_ethnicity <- function (data, subset, outVar) {
 
 ## Now run this function for each subset and outcome
 output <- logreg_ethnicity(data, "Overall", "depression") # both immigration statuses
-output <- logreg_ethnicity(data, "Overall", "currdep")
 output <- logreg_ethnicity(data, "Overall", "undiagdep")
 output <- logreg_ethnicity(data, "Non-Immigrant", "depression")
-output <- logreg_ethnicity(data, "Non-Immigrant", "currdep")
 output <- logreg_ethnicity(data, "Non-Immigrant", "undiagdep")
 output <- logreg_ethnicity(data, "Immigrant", "depression")
-output <- logreg_ethnicity(data, "Immigrant", "currdep")
 output <- logreg_ethnicity(data, "Immigrant", "undiagdep")
 
 # correct p values for multiple comparisons
@@ -174,7 +171,6 @@ logreg_immigration <- function (data, subset, outVar) {
 
 ## Now run this function for each subset and outcome
 output <- logreg_immigration(data, "Overall", "depression")
-output <- logreg_immigration(data, "Overall", "currdep")
 output <- logreg_immigration(data, "Overall", "undiagdep")
 output <- logreg_immigration(data, "Arab", "depression")
 output <- logreg_immigration(data, "Black", "depression")
@@ -182,12 +178,6 @@ output <- logreg_immigration(data, "Mixed or Multiple Heritage", "depression")
 output <- logreg_immigration(data, "Other Asian", "depression")
 output <- logreg_immigration(data, "South Asian", "depression")
 output <- logreg_immigration(data, "White", "depression")
-output <- logreg_immigration(data, "Arab", "currdep")
-output <- logreg_immigration(data, "Black", "currdep")
-output <- logreg_immigration(data, "Mixed or Multiple Heritage", "currdep")
-output <- logreg_immigration(data, "Other Asian", "currdep")
-output <- logreg_immigration(data, "South Asian", "currdep")
-output <- logreg_immigration(data, "White", "currdep")
 output <- logreg_immigration(data, "Arab", "undiagdep")
 output <- logreg_immigration(data, "Black", "undiagdep")
 output <- logreg_immigration(data, "Mixed or Multiple Heritage", "undiagdep")
