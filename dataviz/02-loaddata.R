@@ -21,8 +21,8 @@ rm(aou_dep_ethnicity, aou_dep_immigration, ofh_dep_ethnicity, ofh_dep_immigratio
 logregtransform <- function (df) {
     df <- df %>% mutate(outcome = outcome %>% replace_values(
       "currdep" ~ "Probable Current Depression",
-      "depression" ~ "Lifetime Depression")) %>% 
-      mutate(outcome = factor(outcome, levels = c("Lifetime Depression", "Probable Current Depression"))) %>%
+      "depression" ~ "Lifetime Self-Reported Depression")) %>% 
+      mutate(outcome = factor(outcome, levels = c("Lifetime Self-Reported Depression", "Probable Current Depression"))) %>%
       mutate(ethnicity = ethnicity %>% replace_values(
         "Arab" ~ "Arab, Middle Eastern, or North African",
         "MENA" ~ "Arab, Middle Eastern, or North African"
