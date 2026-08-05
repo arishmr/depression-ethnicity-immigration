@@ -1,9 +1,8 @@
 # Define vector of package names
 packages <- c(
   "dplyr", "tidyverse", "stringr", "forcats", # data wrangling
-  "psych", "epiR", # statistical analysis
-  "ggplot2", "RColorBrewer", "patchwork", # visualisation
-  "summarytools", "htmlTable", "officer", "gtsummary", "flextable" # descriptive stats
+  "psych", # statistical analysis
+  "ggplot2", "RColorBrewer", "patchwork" # visualisation
 )
 
 # Load packages
