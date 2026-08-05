@@ -1,6 +1,6 @@
 ## Only keep data on self-reported lifetime depression
-dep_ethnicity <- dep_ethnicity %>% filter(outcome == "Lifetime Depression")
-dep_immigration <- dep_immigration %>% filter(outcome == "Lifetime Depression")
+dep_ethnicity <- dep_ethnicity %>% filter(outcome == "Lifetime Self-Reported Depression")
+dep_immigration <- dep_immigration %>% filter(outcome == "Lifetime Self-Reported Depression")
 
 ## Remove data where models did not converge
 dep_ethnicity <- dep_ethnicity %>% filter_out(ci.max == Inf)
