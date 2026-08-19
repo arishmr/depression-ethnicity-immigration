@@ -118,7 +118,7 @@ rm(contdemos, output, splitdata, anova)
 catdemos <- demodata %>%
   tidyr::gather(key = "variable",
                 value = "value",
-                sex, depression, income, alcohol, smoking, fatherpsych, motherpsych, immigrate_stage) %>%
+                sex, depression, undiagdep, income, alcohol, smoking, fatherpsych, motherpsych, immigrate_stage) %>%
   tidyr::drop_na(value)
 
 ## Split dataset by demographic variables
